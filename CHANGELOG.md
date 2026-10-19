@@ -5,7 +5,7 @@
 المرحلة 2: عارض GLB حقيقي.
 
 ### أُضيف
-- عارض ثلاثي الأبعاد بمحرك Filament (`filament-android` و`gltfio-android` و`filament-utils-android` 1.77.3).
+- عارض ثلاثي الأبعاد بمحرك Filament (`filament-android` و`gltfio-android` و`filament-utils-android` 1.68.2، وهو الإصدار المتوافق مع AGP 8.7.3 وcompileSdk 35؛ الإصدار 1.77.3 يتطلب compileSdk 37 وAGP 9).
 - فتح ملف GLB من الهاتف: نسخ مؤقت، حد 80 ميغابايت، فحص ترويسة، ثم عرض.
 - تدوير وتكبير باللمس، وإضاءة محيطة، وإعادة ضبط الكاميرا.
 - تشغيل الحركات المضمّنة عبر `AnimationController` (اختيار الحركة، إيقاف مؤقت، السرعة، التكرار).

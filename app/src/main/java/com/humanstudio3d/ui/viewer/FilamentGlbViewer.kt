@@ -28,7 +28,8 @@ import java.nio.ByteBuffer
 /**
  * Real 3D rendering of a GLB with Google's Filament engine (ModelViewer from filament-utils).
  * Orbit and pinch-zoom gestures come from ModelViewer. Animations embedded in the GLB are driven
- * by [AnimationController] (clip, play/pause, speed, loop); ModelViewer's own auto-play is off.
+ * by [AnimationController] (clip, play/pause, speed, loop) from the frame callback, because
+ * ModelViewer 1.68 does not play animations itself.
  *
  * To reset the camera, the caller recreates this composable (`key(...)`), which rebuilds the
  * engine and reloads the file.
@@ -63,10 +64,10 @@ fun FilamentGlbViewer(
     DisposableEffect(surfaceView) {
         FilamentNative.ensureLoaded()
         val modelViewer = ModelViewer(surfaceView)
-        modelViewer.autoPlayAnimations = false
         surfaceView.setOnTouchListener(modelViewer)
 
         // ModelViewer adds a sun light only; without ambient light the shaded side is black.
+        // This light is released together with the engine when ModelViewer shuts down.
         val ambient = IndirectLight.Builder()
             .irradiance(1, floatArrayOf(0.8f, 0.8f, 0.8f))
             .intensity(30_000f)
@@ -108,14 +109,13 @@ fun FilamentGlbViewer(
         viewer = modelViewer
 
         onDispose {
+            // Stop rendering first. ModelViewer destroys its model, renderer, scene and engine
+            // itself when the SurfaceView detaches from the window, so nothing is destroyed
+            // here (touching a destroyed engine would crash).
             lifecycleOwner.lifecycle.removeObserver(observer)
             choreographer.removeFrameCallback(frameCallback)
             surfaceView.setOnTouchListener(null)
             viewer = null
-            modelViewer.destroyModel()
-            modelViewer.scene.indirectLight = null
-            modelViewer.engine.destroyIndirectLight(ambient)
-            modelViewer.destroy()
         }
     }
 

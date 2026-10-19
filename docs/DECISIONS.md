@@ -11,7 +11,7 @@
 
 ## معتمد مؤقتًا (قابل للتغيير)
 
-- **العارض: Filament مباشرة (ModelViewer)** وليس SceneView. السبب: وثائق SceneView تذكر إصدارات متضاربة (4.19 و4.39 و4.60) وتشترط Kotlin 2.4.10 بينما المشروع على 2.0.21، ولا يوجد فيها تحميل موثّق من ملف محلي. Filament من Google بواجهة Java، وآخر إصدار على Maven Central هو 1.77.3 (فُحص 2026-10-20). التبعية: تعارض محتمل في نسخة Kotlin لمكتبة filament-utils، لذلك أُضيف `-Xskip-metadata-version-check`.
+- **العارض: Filament مباشرة (ModelViewer)** وليس SceneView. السبب: وثائق SceneView تذكر إصدارات متضاربة (4.19 و4.39 و4.60) وتشترط Kotlin 2.4.10 بينما المشروع على 2.0.21، ولا يوجد فيها تحميل موثّق من ملف محلي. Filament من Google بواجهة Java. **الإصدار مثبّت على 1.68.2**: جرّبنا 1.77.3 (الأحدث على Maven) فسقط البناء في `checkAarMetadata` لأن Filament الحديث يُبنى بـ compileSdk 37 وAGP 9.3.1 وKotlin 2.4.0، بينما 1.68.2 مبني بـ AGP 8.6.1 وKotlin 2.0.21 وcompileSdk 34. الترقية لاحقًا تتطلب ترقية AGP وcompileSdk معًا. في 1.68.2 لا يشغّل `ModelViewer` الحركات تلقائيًا، لذلك يقودها `AnimationController` من دالة الإطار.
 - minSdk 26، targetSdk 35.
 - لا Firebase في الإصدار الأول. لا مكتبة سحابية.
 - الواجهة مفروضة RTL لأن الموارد عربية فقط.

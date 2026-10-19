@@ -37,9 +37,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-        // Filament's Kotlin utils may be compiled with a newer Kotlin than this project's
-        // compiler; this only relaxes the metadata-version check at compile time.
-        freeCompilerArgs += "-Xskip-metadata-version-check"
     }
     buildFeatures {
         compose = true
