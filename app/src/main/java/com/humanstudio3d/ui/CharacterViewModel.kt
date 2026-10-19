@@ -7,9 +7,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.humanstudio3d.data.ImageImportException
 import com.humanstudio3d.data.ImageRepository
+import com.humanstudio3d.data.ExportException
+import com.humanstudio3d.data.ModelExporter
 import com.humanstudio3d.data.ModelImportException
 import com.humanstudio3d.data.ModelRepository
 import com.humanstudio3d.domain.FailureReason
+import com.humanstudio3d.domain.ExportErrorKind
 import com.humanstudio3d.domain.GlbReport
 import com.humanstudio3d.domain.GlbValidator
 import com.humanstudio3d.domain.ModelErrorKind
@@ -47,12 +50,20 @@ data class ModelUiState(
     val error: ModelErrorKind? = null,
 )
 
+sealed interface ExportState {
+    data object Idle : ExportState
+    data object Saving : ExportState
+    data class Success(val bytes: Long) : ExportState
+    data class Failed(val kind: ExportErrorKind) : ExportState
+}
+
 enum class UiEvent { ImageReady, ModelReady }
 
 class CharacterViewModel(app: Application) : AndroidViewModel(app) {
 
     private val images = ImageRepository(app)
     private val models = ModelRepository(app)
+    private val exporter = ModelExporter(app)
 
     // Swap this for a real provider once the owner approves one (see docs/DECISIONS.md).
     private val imageTo3D: ImageTo3DService = NotConfiguredImageTo3DService()
@@ -65,6 +76,9 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _model = MutableStateFlow(ModelUiState())
     val model: StateFlow<ModelUiState> = _model.asStateFlow()
+
+    private val _export = MutableStateFlow<ExportState>(ExportState.Idle)
+    val export: StateFlow<ExportState> = _export.asStateFlow()
 
     private val _events = MutableSharedFlow<UiEvent>(extraBufferCapacity = 1)
     val events: SharedFlow<UiEvent> = _events.asSharedFlow()
@@ -161,6 +175,27 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
     fun discardModel() {
         models.clear()
         _model.value = ModelUiState()
+        _export.value = ExportState.Idle
+    }
+
+    fun resetExport() {
+        if (_export.value !is ExportState.Saving) _export.value = ExportState.Idle
+    }
+
+    /** Saves the opened GLB to [uri] chosen by the user; reports success only after verification. */
+    fun exportTo(uri: Uri?) {
+        if (uri == null) return
+        val file = models.current ?: return
+        if (_export.value is ExportState.Saving) return
+        _export.value = ExportState.Saving
+        viewModelScope.launch {
+            exporter.export(file, uri)
+                .onSuccess { bytes -> _export.value = ExportState.Success(bytes) }
+                .onFailure { e ->
+                    val kind = (e as? ExportException)?.kind ?: ExportErrorKind.IO
+                    _export.value = ExportState.Failed(kind)
+                }
+        }
     }
 
     fun resetProcessing() {

@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.humanstudio3d.ui.screens.ExportScreen
 import com.humanstudio3d.ui.screens.HomeScreen
 import com.humanstudio3d.ui.screens.PrivacyScreen
 import com.humanstudio3d.ui.screens.ProcessingScreen
@@ -17,6 +18,7 @@ private object Routes {
     const val PROCESSING = "processing"
     const val PRIVACY = "privacy"
     const val VIEWER = "viewer"
+    const val EXPORT = "export"
 }
 
 @Composable
@@ -67,7 +69,14 @@ fun AppNav(vm: CharacterViewModel) {
             PrivacyScreen(onBack = { nav.popBackStack() })
         }
         composable(Routes.VIEWER) {
-            ViewerScreen(vm = vm, onBack = { nav.popBackStack() })
+            ViewerScreen(
+                vm = vm,
+                onBack = { nav.popBackStack() },
+                onExport = { nav.navigate(Routes.EXPORT) },
+            )
+        }
+        composable(Routes.EXPORT) {
+            ExportScreen(vm = vm, onBack = { nav.popBackStack() })
         }
     }
 }

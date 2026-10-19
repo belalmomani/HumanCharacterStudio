@@ -73,6 +73,25 @@
     <string name="viewer_animation_unnamed">بلا اسم</string>
     <string name="viewer_speed">السرعة %1$s×</string>
 
+    <!-- Export -->
+    <string name="action_export">تصدير</string>
+    <string name="action_save">حفظ الملف</string>
+    <string name="action_save_retry">إعادة المحاولة</string>
+    <string name="export_title">تصدير النموذج</string>
+    <string name="export_no_model">لا يوجد نموذج للتصدير. افتح ملف GLB أولًا.</string>
+    <string name="export_format">الصيغة: GLB. هي الصيغة الوحيدة المدعومة حاليًا، أما glTF وFBX فغير منفَّذتين بعد.</string>
+    <string name="export_size">حجم الملف: %1$s ميغابايت</string>
+    <string name="export_check_present">✓ %1$s</string>
+    <string name="export_check_absent">✗ بلا %1$s</string>
+    <string name="export_static_warning">لا يحتوي النموذج على هيكل عظمي، فالملف ثابت وغير جاهز للتحريك في محرك اللعبة.</string>
+    <string name="export_note">يُحفظ الملف كما فُتح دون تعديل. إعدادات الكاميرا والإضاءة داخل التطبيق للمعاينة فقط ولا تُضمَّن فيه. لم نختبر الملف في Unity أو Unreal أو Godot.</string>
+    <string name="export_name_label">اسم الملف</string>
+    <string name="export_will_save_as">سيُحفظ باسم: %1$s</string>
+    <string name="export_saving">جارٍ الحفظ والتحقق من الملف المكتوب</string>
+    <string name="export_success">تم الحفظ (%1$s ميغابايت) بعد التحقق من الملف المكتوب.</string>
+    <string name="export_failed_io">تعذّر حفظ الملف. قد تكون المساحة غير كافية أو الموقع غير مسموح بالكتابة فيه.</string>
+    <string name="export_failed_verify">كُتب الملف لكن التحقق من حجمه فشل، فحُذف. أعد المحاولة في موقع آخر.</string>
+
     <!-- GLB import errors -->
     <string name="error_glb_invalid">الملف ليس GLB صالحًا. اختر ملفًا آخر.</string>
     <string name="error_glb_too_large">الملف أكبر من الحد المسموح (80 ميغابايت).</string>

@@ -38,7 +38,7 @@ private enum class LoadState { Loading, Loaded, Failed }
 private val SPEEDS = listOf(0.5f, 1f, 1.5f, 2f)
 
 @Composable
-fun ViewerScreen(vm: CharacterViewModel, onBack: () -> Unit) {
+fun ViewerScreen(vm: CharacterViewModel, onBack: () -> Unit, onExport: () -> Unit) {
     val model by vm.model.collectAsStateWithLifecycle()
     val file = model.file
     val report = model.report
@@ -203,16 +203,28 @@ fun ViewerScreen(vm: CharacterViewModel, onBack: () -> Unit) {
                 }
             }
 
-            OutlinedButton(
-                onClick = {
-                    loadState = LoadState.Loading
-                    resetKey += 1
-                },
-                enabled = file != null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 52.dp),
-            ) { Text(stringResource(R.string.viewer_reset_camera)) }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        loadState = LoadState.Loading
+                        resetKey += 1
+                    },
+                    enabled = file != null,
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = 52.dp),
+                ) { Text(stringResource(R.string.viewer_reset_camera)) }
+                OutlinedButton(
+                    onClick = onExport,
+                    enabled = file != null,
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = 52.dp),
+                ) { Text(stringResource(R.string.action_export)) }
+            }
         }
     }
 }
