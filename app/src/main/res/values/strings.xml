@@ -48,6 +48,36 @@
     <string name="error_io">تعذّرت قراءة الصورة. حاول مرة أخرى.</string>
     <string name="error_camera_unavailable">لا يوجد تطبيق كاميرا متاح على هذا الجهاز.</string>
 
+    <!-- GLB viewer -->
+    <string name="action_open_glb">عرض ملف GLB موجود</string>
+    <string name="action_previous">السابق</string>
+    <string name="action_next">التالي</string>
+    <string name="action_play">تشغيل</string>
+    <string name="action_pause">إيقاف مؤقت</string>
+    <string name="action_loop_on">التكرار: مفعّل</string>
+    <string name="action_loop_off">التكرار: متوقف</string>
+    <string name="viewer_title">معاينة النموذج</string>
+    <string name="viewer_loading">جارٍ تحميل النموذج</string>
+    <string name="viewer_failed">تعذّر تحميل النموذج. قد يكون الملف تالفًا أو يستخدم ميزات غير مدعومة.</string>
+    <string name="viewer_no_model">لا يوجد نموذج للعرض. ارجع وافتح ملف GLB.</string>
+    <string name="viewer_gesture_hint">اسحب للتدوير، وافتح الإصبعين للتكبير والتصغير.</string>
+    <string name="viewer_reset_camera">إعادة ضبط الكاميرا</string>
+    <string name="viewer_features">يحتوي الملف على: %1$s (فحص نصي سريع، لا يضمن سلامة الهيكل أو الأوزان).</string>
+    <string name="viewer_features_none">لا يحتوي الملف على مواد أو هيكل عظمي أو حركات.</string>
+    <string name="feature_materials">مواد</string>
+    <string name="feature_skeleton">هيكل عظمي</string>
+    <string name="feature_animations">حركات</string>
+    <string name="feature_morph">Morph Targets</string>
+    <string name="viewer_no_animations">لا توجد حركات مضمّنة في هذا الملف، فلا شيء يُشغَّل.</string>
+    <string name="viewer_animation_label">الحركة %1$d من %2$d: %3$s</string>
+    <string name="viewer_animation_unnamed">بلا اسم</string>
+    <string name="viewer_speed">السرعة %1$s×</string>
+
+    <!-- GLB import errors -->
+    <string name="error_glb_invalid">الملف ليس GLB صالحًا. اختر ملفًا آخر.</string>
+    <string name="error_glb_too_large">الملف أكبر من الحد المسموح (80 ميغابايت).</string>
+    <string name="error_glb_io">تعذّرت قراءة الملف. حاول مرة أخرى.</string>
+
     <!-- Privacy -->
     <string name="privacy_title">الخصوصية</string>
     <string name="privacy_body">• صورتك تبقى على جهازك داخل مجلد مؤقت، وتُحذف عند الإلغاء أو إغلاق التطبيق.\n\n• في هذه النسخة لا تُرسَل أي صورة إلى أي خدمة خارجية.\n\n• عند ربط خدمة لإنشاء النماذج لاحقًا، سيُطلب منك إذن صريح قبل رفع الصورة، مع توضيح اسم الخدمة وسياسة احتفاظها بالبيانات. لا يمكننا ضمان حذف ما يُحفَظ لدى طرف خارجي.\n\n• لا توجد حسابات ولا مكتبة سحابية، ولا يُجمع أي بيانات تحليلية.\n\n• لا يطلب التطبيق إذن الكاميرا ولا الوصول الواسع للملفات؛ تُستخدم الكاميرا ومنتقي الصور من النظام.</string>

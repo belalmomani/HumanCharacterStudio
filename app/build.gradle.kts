@@ -15,8 +15,8 @@ android {
         applicationId = "com.example.humanstudio3d"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
     }
 
     buildTypes {
@@ -37,6 +37,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+        // Filament's Kotlin utils may be compiled with a newer Kotlin than this project's
+        // compiler; this only relaxes the metadata-version check at compile time.
+        freeCompilerArgs += "-Xskip-metadata-version-check"
     }
     buildFeatures {
         compose = true
@@ -55,6 +58,9 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.exifinterface)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.filament.android)
+    implementation(libs.filament.gltfio)
+    implementation(libs.filament.utils)
 
     testImplementation(libs.junit)
 }

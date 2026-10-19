@@ -25,3 +25,5 @@ enum class FailureReason {
 }
 
 enum class ImageErrorKind { UNSUPPORTED, TOO_LARGE, IO }
+
+enum class ModelErrorKind { TOO_LARGE, INVALID, IO }

@@ -1,3 +1,5 @@
 # Project-specific ProGuard/R8 rules.
-# No custom rules are needed yet. Add rules here when a 3D viewer or an
-# ad SDK that ships its own consumer rules requires extra keeps.
+
+# Filament is driven through JNI; keep its classes and native method bindings.
+-keep class com.google.android.filament.** { *; }
+-dontwarn com.google.android.filament.**

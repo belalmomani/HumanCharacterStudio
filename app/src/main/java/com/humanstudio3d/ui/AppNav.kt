@@ -9,12 +9,14 @@ import com.humanstudio3d.ui.screens.HomeScreen
 import com.humanstudio3d.ui.screens.PrivacyScreen
 import com.humanstudio3d.ui.screens.ProcessingScreen
 import com.humanstudio3d.ui.screens.ReviewScreen
+import com.humanstudio3d.ui.screens.ViewerScreen
 
 private object Routes {
     const val HOME = "home"
     const val REVIEW = "review"
     const val PROCESSING = "processing"
     const val PRIVACY = "privacy"
+    const val VIEWER = "viewer"
 }
 
 @Composable
@@ -23,7 +25,10 @@ fun AppNav(vm: CharacterViewModel) {
 
     LaunchedEffect(Unit) {
         vm.events.collect { event ->
-            if (event == UiEvent.ImageReady) nav.navigate(Routes.REVIEW)
+            when (event) {
+                UiEvent.ImageReady -> nav.navigate(Routes.REVIEW)
+                UiEvent.ModelReady -> nav.navigate(Routes.VIEWER)
+            }
         }
     }
 
@@ -60,6 +65,9 @@ fun AppNav(vm: CharacterViewModel) {
         }
         composable(Routes.PRIVACY) {
             PrivacyScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.VIEWER) {
+            ViewerScreen(vm = vm, onBack = { nav.popBackStack() })
         }
     }
 }

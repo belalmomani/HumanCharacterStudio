@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.humanstudio3d.R
 import com.humanstudio3d.domain.ImageErrorKind
+import com.humanstudio3d.domain.ModelErrorKind
 import com.humanstudio3d.ui.CharacterViewModel
 import kotlinx.coroutines.launch
 
@@ -51,7 +52,23 @@ fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit) {
         vm.onCaptureResult(it)
     }
 
+    // Any file type is offered because file managers report .glb inconsistently;
+    // the content is validated after copying.
+    val glbPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
+        vm.onGlbPicked(it)
+    }
+    val modelState by vm.model.collectAsStateWithLifecycle()
+    val busy = state.busy || modelState.busy
+
     val cameraUnavailable = stringResource(R.string.error_camera_unavailable)
+    val modelError = modelState.error
+    if (modelError != null) {
+        val message = stringResource(modelError.messageRes())
+        LaunchedEffect(modelError) {
+            snackbar.showSnackbar(message)
+            vm.clearModelError()
+        }
+    }
     val errorKind = state.error
     if (errorKind != null) {
         val message = stringResource(errorKind.messageRes())
@@ -79,7 +96,7 @@ fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit) {
                 color = MaterialTheme.colorScheme.surfaceVariant,
             ) {
                 Box(modifier = Modifier.padding(24.dp), contentAlignment = Alignment.Center) {
-                    if (state.busy) {
+                    if (busy) {
                         CircularProgressIndicator()
                     } else {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -104,7 +121,7 @@ fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit) {
                 onClick = {
                     picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 },
-                enabled = !state.busy,
+                enabled = !busy,
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 56.dp),
@@ -118,11 +135,19 @@ fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit) {
                         scope.launch { snackbar.showSnackbar(cameraUnavailable) }
                     }
                 },
-                enabled = !state.busy,
+                enabled = !busy,
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 56.dp),
             ) { Text(stringResource(R.string.action_capture)) }
+
+            OutlinedButton(
+                onClick = { glbPicker.launch(arrayOf("*/*")) },
+                enabled = !busy,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 56.dp),
+            ) { Text(stringResource(R.string.action_open_glb)) }
 
             TextButton(
                 onClick = onOpenPrivacy,
@@ -136,4 +161,10 @@ private fun ImageErrorKind.messageRes(): Int = when (this) {
     ImageErrorKind.UNSUPPORTED -> R.string.error_unsupported
     ImageErrorKind.TOO_LARGE -> R.string.error_too_large
     ImageErrorKind.IO -> R.string.error_io
+}
+
+private fun ModelErrorKind.messageRes(): Int = when (this) {
+    ModelErrorKind.INVALID -> R.string.error_glb_invalid
+    ModelErrorKind.TOO_LARGE -> R.string.error_glb_too_large
+    ModelErrorKind.IO -> R.string.error_glb_io
 }
