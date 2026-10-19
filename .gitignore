@@ -1,0 +1,17 @@
+*.iml
+.gradle/
+build/
+local.properties
+.idea/
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Secrets and signing material: never commit
+*.jks
+*.keystore
+keystore.properties
+secrets.properties
+google-services.json
+.env

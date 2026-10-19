@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">استوديو الشخصيات</string>
+
+    <!-- Home -->
+    <string name="home_empty_title">شخصيتك ثلاثية الأبعاد ستظهر هنا</string>
+    <string name="home_empty_hint">اختر صورة من هاتفك أو التقطها لتبدأ</string>
+    <string name="action_pick">اختيار صورة</string>
+    <string name="action_capture">التقاط صورة</string>
+    <string name="action_privacy">الخصوصية</string>
+    <string name="action_back">رجوع</string>
+
+    <!-- Review -->
+    <string name="review_title">مراجعة الصورة</string>
+    <string name="review_tips">للحصول على نتيجة أفضل: صورة واضحة وإضاءة جيدة وجسم ظاهر قدر الإمكان. جودة النموذج تعتمد على الصورة وعلى الخدمة المستخدمة.</string>
+    <string name="review_image_description">الصورة المختارة</string>
+    <string name="action_rotate_right">تدوير يمينًا</string>
+    <string name="action_rotate_left">تدوير يسارًا</string>
+    <string name="action_replace">استبدال الصورة</string>
+    <string name="action_confirm">متابعة</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="review_missing_image">لا توجد صورة. ارجع واختر صورة.</string>
+
+    <!-- Processing -->
+    <string name="processing_title">إنشاء النموذج</string>
+    <string name="state_ready">جاهز للرفع</string>
+    <string name="state_uploading">جارٍ رفع الصورة</string>
+    <string name="state_generating">جارٍ إنشاء النموذج</string>
+    <string name="state_downloading">جارٍ تنزيل النتيجة</string>
+    <string name="state_validating">جارٍ التحقق من الملف</string>
+    <string name="state_completed">اكتملت العملية</string>
+    <string name="state_completed_note">حُفظ النموذج مؤقتًا. عرضه ومعاينته لم يُنفَّذا بعد في هذه النسخة.</string>
+    <string name="state_cancelled">ألغيت العملية</string>
+    <string name="state_failed">فشلت العملية</string>
+    <string name="action_retry">إعادة المحاولة</string>
+    <string name="action_pick_another">اختيار صورة أخرى</string>
+
+    <string name="failure_not_configured">لم يُربط بعد مزوّد لإنشاء النماذج ثلاثية الأبعاد في هذه النسخة، لذلك لم يُرسَل أي شيء من صورتك خارج جهازك.</string>
+    <string name="failure_network">تعذّر الاتصال بالإنترنت. تحقق من الاتصال ثم أعد المحاولة.</string>
+    <string name="failure_timeout">انتهت مهلة الخدمة قبل اكتمال العملية. أعد المحاولة لاحقًا.</string>
+    <string name="failure_quota">استُهلك الحد المتاح للخدمة حاليًا. حاول لاحقًا.</string>
+    <string name="failure_invalid_model">الملف الناتج غير صالح كنموذج ثلاثي الأبعاد. جرّب صورة أخرى.</string>
+    <string name="failure_unknown">حدث خطأ غير متوقع. أعد المحاولة أو اختر صورة أخرى.</string>
+
+    <!-- Image errors -->
+    <string name="error_unsupported">هذه الصورة غير مدعومة أو تالفة. اختر صورة أخرى.</string>
+    <string name="error_too_large">الصورة كبيرة جدًا على ذاكرة الجهاز. اختر صورة أصغر.</string>
+    <string name="error_io">تعذّرت قراءة الصورة. حاول مرة أخرى.</string>
+    <string name="error_camera_unavailable">لا يوجد تطبيق كاميرا متاح على هذا الجهاز.</string>
+
+    <!-- Privacy -->
+    <string name="privacy_title">الخصوصية</string>
+    <string name="privacy_body">• صورتك تبقى على جهازك داخل مجلد مؤقت، وتُحذف عند الإلغاء أو إغلاق التطبيق.\n\n• في هذه النسخة لا تُرسَل أي صورة إلى أي خدمة خارجية.\n\n• عند ربط خدمة لإنشاء النماذج لاحقًا، سيُطلب منك إذن صريح قبل رفع الصورة، مع توضيح اسم الخدمة وسياسة احتفاظها بالبيانات. لا يمكننا ضمان حذف ما يُحفَظ لدى طرف خارجي.\n\n• لا توجد حسابات ولا مكتبة سحابية، ولا يُجمع أي بيانات تحليلية.\n\n• لا يطلب التطبيق إذن الكاميرا ولا الوصول الواسع للملفات؛ تُستخدم الكاميرا ومنتقي الصور من النظام.</string>
+</resources>
