@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.humanstudio3d.ui.screens.ExportScreen
+import com.humanstudio3d.ui.screens.HelpScreen
 import com.humanstudio3d.ui.screens.HomeScreen
 import com.humanstudio3d.ui.screens.PrivacyScreen
 import com.humanstudio3d.ui.screens.ProcessingScreen
@@ -19,6 +20,7 @@ private object Routes {
     const val PRIVACY = "privacy"
     const val VIEWER = "viewer"
     const val EXPORT = "export"
+    const val HELP = "help"
 }
 
 @Composable
@@ -36,7 +38,14 @@ fun AppNav(vm: CharacterViewModel) {
 
     NavHost(navController = nav, startDestination = Routes.HOME) {
         composable(Routes.HOME) {
-            HomeScreen(vm = vm, onOpenPrivacy = { nav.navigate(Routes.PRIVACY) })
+            HomeScreen(
+                vm = vm,
+                onOpenPrivacy = { nav.navigate(Routes.PRIVACY) },
+                onOpenHelp = { nav.navigate(Routes.HELP) },
+            )
+        }
+        composable(Routes.HELP) {
+            HelpScreen(onBack = { nav.popBackStack() })
         }
         composable(Routes.REVIEW) {
             ReviewScreen(

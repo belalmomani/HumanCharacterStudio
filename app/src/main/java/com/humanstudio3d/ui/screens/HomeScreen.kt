@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -40,7 +41,7 @@ import com.humanstudio3d.ui.CharacterViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit) {
+fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit, onOpenHelp: () -> Unit) {
     val state by vm.image.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -149,10 +150,13 @@ fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit) {
                     .heightIn(min = 56.dp),
             ) { Text(stringResource(R.string.action_open_glb)) }
 
-            TextButton(
-                onClick = onOpenPrivacy,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            ) { Text(stringResource(R.string.action_privacy)) }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                TextButton(onClick = onOpenHelp) { Text(stringResource(R.string.action_help)) }
+                TextButton(onClick = onOpenPrivacy) { Text(stringResource(R.string.action_privacy)) }
+            }
         }
     }
 }
