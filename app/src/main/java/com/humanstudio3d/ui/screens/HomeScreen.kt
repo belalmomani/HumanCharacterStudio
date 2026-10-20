@@ -41,7 +41,12 @@ import com.humanstudio3d.ui.CharacterViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit, onOpenHelp: () -> Unit) {
+fun HomeScreen(
+    vm: CharacterViewModel,
+    onOpenPrivacy: () -> Unit,
+    onOpenHelp: () -> Unit,
+    onOpenSettings: () -> Unit,
+) {
     val state by vm.image.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -154,6 +159,7 @@ fun HomeScreen(vm: CharacterViewModel, onOpenPrivacy: () -> Unit, onOpenHelp: ()
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
             ) {
+                TextButton(onClick = onOpenSettings) { Text(stringResource(R.string.action_settings)) }
                 TextButton(onClick = onOpenHelp) { Text(stringResource(R.string.action_help)) }
                 TextButton(onClick = onOpenPrivacy) { Text(stringResource(R.string.action_privacy)) }
             }

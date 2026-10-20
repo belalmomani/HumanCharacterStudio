@@ -20,6 +20,7 @@ enum class FailureReason {
     NETWORK,
     TIMEOUT,
     QUOTA_EXHAUSTED,
+    AUTH,
     INVALID_MODEL,
     UNKNOWN,
 }

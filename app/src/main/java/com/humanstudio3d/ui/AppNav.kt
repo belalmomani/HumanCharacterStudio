@@ -11,6 +11,7 @@ import com.humanstudio3d.ui.screens.HomeScreen
 import com.humanstudio3d.ui.screens.PrivacyScreen
 import com.humanstudio3d.ui.screens.ProcessingScreen
 import com.humanstudio3d.ui.screens.ReviewScreen
+import com.humanstudio3d.ui.screens.SettingsScreen
 import com.humanstudio3d.ui.screens.ViewerScreen
 
 private object Routes {
@@ -21,6 +22,7 @@ private object Routes {
     const val VIEWER = "viewer"
     const val EXPORT = "export"
     const val HELP = "help"
+    const val SETTINGS = "settings"
 }
 
 @Composable
@@ -42,7 +44,11 @@ fun AppNav(vm: CharacterViewModel) {
                 vm = vm,
                 onOpenPrivacy = { nav.navigate(Routes.PRIVACY) },
                 onOpenHelp = { nav.navigate(Routes.HELP) },
+                onOpenSettings = { nav.navigate(Routes.SETTINGS) },
             )
+        }
+        composable(Routes.SETTINGS) {
+            SettingsScreen(onBack = { nav.popBackStack() })
         }
         composable(Routes.HELP) {
             HelpScreen(onBack = { nav.popBackStack() })
@@ -72,6 +78,7 @@ fun AppNav(vm: CharacterViewModel) {
                     vm.discardImage()
                     nav.popBackStack(Routes.HOME, inclusive = false)
                 },
+                onOpenSettings = { nav.navigate(Routes.SETTINGS) },
             )
         }
         composable(Routes.PRIVACY) {

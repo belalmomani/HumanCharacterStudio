@@ -33,6 +33,7 @@ fun ProcessingScreen(
     vm: CharacterViewModel,
     onBack: () -> Unit,
     onPickAnother: () -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     val state by vm.processing.collectAsStateWithLifecycle()
 
@@ -70,8 +71,17 @@ fun ProcessingScreen(
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    // Retry only makes sense when a provider exists and the failure is transient.
-                    if (s.reason != FailureReason.PROVIDER_NOT_CONFIGURED) {
+                    // Settings problems need the settings screen, not a blind retry.
+                    val needsSettings = s.reason == FailureReason.PROVIDER_NOT_CONFIGURED ||
+                        s.reason == FailureReason.AUTH
+                    if (needsSettings) {
+                        Button(
+                            onClick = onOpenSettings,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 52.dp),
+                        ) { Text(stringResource(R.string.action_open_settings)) }
+                    } else {
                         Button(
                             onClick = {
                                 vm.resetProcessing()
@@ -129,6 +139,7 @@ private fun FailureReason.messageRes(): Int = when (this) {
     FailureReason.NETWORK -> R.string.failure_network
     FailureReason.TIMEOUT -> R.string.failure_timeout
     FailureReason.QUOTA_EXHAUSTED -> R.string.failure_quota
+    FailureReason.AUTH -> R.string.failure_auth
     FailureReason.INVALID_MODEL -> R.string.failure_invalid_model
     FailureReason.UNKNOWN -> R.string.failure_unknown
 }

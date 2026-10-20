@@ -57,6 +57,12 @@ class ModelRepository(private val context: Context) {
         }
     }
 
+    /** Moves an already validated file (same cache folder) in as the current model. */
+    fun adopt(source: File): File? {
+        currentFile.delete()
+        return if (source.renameTo(currentFile)) currentFile else null
+    }
+
     fun clear() {
         File(context.cacheDir, "models").deleteRecursively()
     }

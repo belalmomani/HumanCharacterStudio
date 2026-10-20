@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.humanstudio3d.data.ImageImportException
 import com.humanstudio3d.data.ImageRepository
 import com.humanstudio3d.data.ExportException
+import com.humanstudio3d.data.HttpImageTo3DService
+import com.humanstudio3d.data.ServerSettings
 import com.humanstudio3d.data.ModelExporter
 import com.humanstudio3d.data.ModelImportException
 import com.humanstudio3d.data.ModelRepository
@@ -19,7 +21,7 @@ import com.humanstudio3d.domain.ModelErrorKind
 import com.humanstudio3d.domain.ImageErrorKind
 import com.humanstudio3d.domain.ImageTo3DResult
 import com.humanstudio3d.domain.ImageTo3DService
-import com.humanstudio3d.domain.NotConfiguredImageTo3DService
+import com.humanstudio3d.domain.ServerUrl
 import com.humanstudio3d.domain.ProcessingState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -65,8 +67,12 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
     private val models = ModelRepository(app)
     private val exporter = ModelExporter(app)
 
-    // Swap this for a real provider once the owner approves one (see docs/DECISIONS.md).
-    private val imageTo3D: ImageTo3DService = NotConfiguredImageTo3DService()
+    // Talks to the user's own server (address typed in Settings). Not configured until then.
+    private val serverSettings = ServerSettings(app)
+    private val imageTo3D: ImageTo3DService = HttpImageTo3DService(app, serverSettings)
+
+    // The user must agree before a photo leaves the device; reset whenever the photo changes.
+    private var uploadConsent = false
 
     private val _image = MutableStateFlow(ImageUiState())
     val image: StateFlow<ImageUiState> = _image.asStateFlow()
@@ -119,6 +125,7 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
             val result = images.importFromUri(uri)
             afterImport()
             result.onSuccess { bitmap ->
+                uploadConsent = false
                 _processing.value = ProcessingState.Idle
                 _image.value = ImageUiState(preview = bitmap)
                 _events.tryEmit(UiEvent.ImageReady)
@@ -145,6 +152,7 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
 
     /** Cancel / replace: drops the photo and every temporary file. */
     fun discardImage() {
+        uploadConsent = false
         processingJob?.cancel()
         images.clearAll()
         _image.value = ImageUiState()
@@ -198,6 +206,13 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /** Host of the configured server for the consent dialog, or null when none is configured. */
+    fun serverHost(): String? = serverSettings.baseUrl?.let { ServerUrl.host(it) }
+
+    fun grantUploadConsent() {
+        uploadConsent = true
+    }
+
     fun resetProcessing() {
         _processing.value = ProcessingState.Idle
     }
@@ -211,6 +226,11 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
             _processing.value = ProcessingState.Failed(FailureReason.PROVIDER_NOT_CONFIGURED)
             return
         }
+        if (!uploadConsent) {
+            // Defensive: the review screen asks first, so this should not happen.
+            _processing.value = ProcessingState.Cancelled
+            return
+        }
 
         processingJob = viewModelScope.launch {
             _processing.value = ProcessingState.ReadyToUpload
@@ -219,8 +239,14 @@ class CharacterViewModel(app: Application) : AndroidViewModel(app) {
                     is ImageTo3DResult.Success -> {
                         _processing.value = ProcessingState.Validating
                         val report = withContext(Dispatchers.IO) { GlbValidator.validateFile(result.glb) }
-                        if (report.valid) {
-                            _processing.value = ProcessingState.Completed(result.glb, report)
+                        val adopted = if (report.valid) models.adopt(result.glb) else null
+                        if (adopted != null) {
+                            _model.value = ModelUiState(file = adopted, report = report)
+                            _processing.value = ProcessingState.Completed(adopted, report)
+                            _events.tryEmit(UiEvent.ModelReady)
+                        } else if (report.valid) {
+                            result.glb.delete()
+                            _processing.value = ProcessingState.Failed(FailureReason.UNKNOWN)
                         } else {
                             result.glb.delete()
                             _processing.value = ProcessingState.Failed(FailureReason.INVALID_MODEL)
